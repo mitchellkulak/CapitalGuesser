@@ -5,21 +5,7 @@
   <title>Capital Guesser | Home</title>
   <meta name="viewport" content="initial-scale=1.0">
   <meta charset="utf-8">
-  <style>
-    /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-    #map {
-      height: 100%;
-    }
-
-    /* Optional: Makes the sample page fill the window. */
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
 <body>
@@ -94,7 +80,7 @@
 
   </script>
 
-  <div id="UserFileUploadDiv">
+  <!-- <div id="UserFileUploadDiv">
     <input id="UserUpload" type="file">
     <button onclick="UserProcessUpload()">Upload Users</button>
   </div>
@@ -102,6 +88,15 @@
   <div id="CapitalDataFileUploadDiv">
     <input id="CapitalDataUpload" type="file">
     <button onclick="CapitalDataProcessUpload()">Upload Capitals</button>
+  </div> -->
+
+  <div id="navBar">
+    <h1 id="title">World Capital Guesser</h1>
+    <ul>
+      <li><a href="index.html">Game</a></li>
+      <li><a href="score.html">High Scores</a></li>
+      <li><a href="profile.html">Profile</a></li>
+    </ul>
   </div>
 
   <div id="map"></div>
@@ -357,8 +352,8 @@
       // Create a map object, and include the MapTypeId to add
       // to the map type control.
       var map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 55.647, lng: 37.581 },
-        zoom: 11,
+        center: { lat: 43.6, lng: -83.1 },
+        zoom: 7,
         disableDefaultUI: true,
         mapTypeControlOptions: {
           mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
