@@ -78,9 +78,85 @@
       }
     }
 
+<<<<<<< HEAD
+<body>
+  
+  <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+  
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyApQJhDBdHM_OPLpiYG5jr6bYNgeH0Oqmo",
+      authDomain: "capitalguesser-98105.firebaseapp.com",
+      databaseURL: "https://capitalguesser-98105.firebaseio.com",
+      projectId: "capitalguesser-98105",
+      storageBucket: "capitalguesser-98105.appspot.com",
+      messagingSenderId: "211259741975"
+    };
+    firebase.initializeApp(config);
+    var UserDatabaseRef = firebase.database().ref("Users");
+    var CapitalDatabaseRef = firebase.database().ref("Capitals");
+    /*
+    // Example of a random customer generator
+    var faker = require('faker'); // Faker.js
+
+    api.customer = {
+      id: random.special(4, 8),
+      name: faker.name.findName(),
+      phone: faker.phone.phoneNumber("(###) ###-####"),
+      address: {
+        street: faker.address.streetAddress(),
+        city: faker.address.city(),
+        state: faker.address.state(),
+      }
+    };
+    */
+    //upload users
+    function UserProcessUpload() {
+      var uploadInfo = document.getElementById("UserUpload");
+      if ("files" in uploadInfo) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          var jsonObj = JSON.parse(event.target.result);
+
+          /* put your code here, whatever you need to do with jsonObj */
+          for (var i = 0; i <= jsonObj.length; i++) {
+            UserDatabaseRef.push(jsonObj[i]);
+          }
+        };
+
+        /* file is an array and we are interested only in the first element */
+        reader.readAsText(uploadInfo.files[0]);
+      }
+    }
+
+    //upload capital data
+    function CapitalDataProcessUpload() {
+      var uploadInfo = document.getElementById("CapitalDataUpload");
+      if ("files" in uploadInfo) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          var jsonObj = JSON.parse(event.target.result);
+
+          /* put your code here, whatever you need to do with jsonObj */
+          for (var i = 0; i <= jsonObj.length; i++) {
+            CapitalDatabaseRef.push(jsonObj[i]);
+          }
+        };
+
+        /* file is an array and we are interested only in the first element */
+        reader.readAsText(uploadInfo.files[0]);
+      }
+    }
+
+  </script>
+
+  <div id="UserFileUploadDiv">
+=======
   </script>
 
   <!-- <div id="UserFileUploadDiv">
+>>>>>>> b721667f46b00ff1764d4f09dff39b14e7e666a9
     <input id="UserUpload" type="file">
     <button onclick="UserProcessUpload()">Upload Users</button>
   </div>
@@ -88,6 +164,8 @@
   <div id="CapitalDataFileUploadDiv">
     <input id="CapitalDataUpload" type="file">
     <button onclick="CapitalDataProcessUpload()">Upload Capitals</button>
+<<<<<<< HEAD
+=======
   </div> -->
 
   <div id="navBar">
@@ -97,6 +175,7 @@
       <li class="navItem"><a class="navItem" href="score.html">High Scores</a></li>
       <li class="navItem"><a class="navItem" href="profile.html">Profile</a></li>
     </ul>
+>>>>>>> b721667f46b00ff1764d4f09dff39b14e7e666a9
   </div>
 
   <div id="map"></div>
