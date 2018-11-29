@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Simple Map</title>
+  <title>Capital Guesser | Home</title>
   <meta name="viewport" content="initial-scale=1.0">
   <meta charset="utf-8">
   <style>
@@ -23,15 +23,94 @@
 </head>
 
 <body>
+  
+  <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+  
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyApQJhDBdHM_OPLpiYG5jr6bYNgeH0Oqmo",
+      authDomain: "capitalguesser-98105.firebaseapp.com",
+      databaseURL: "https://capitalguesser-98105.firebaseio.com",
+      projectId: "capitalguesser-98105",
+      storageBucket: "capitalguesser-98105.appspot.com",
+      messagingSenderId: "211259741975"
+    };
+    firebase.initializeApp(config);
+    var UserDatabaseRef = firebase.database().ref("Users");
+    var CapitalDatabaseRef = firebase.database().ref("Capitals");
+    /*
+    // Example of a random customer generator
+    var faker = require('faker'); // Faker.js
+
+    api.customer = {
+      id: random.special(4, 8),
+      name: faker.name.findName(),
+      phone: faker.phone.phoneNumber("(###) ###-####"),
+      address: {
+        street: faker.address.streetAddress(),
+        city: faker.address.city(),
+        state: faker.address.state(),
+      }
+    };
+    */
+    //upload users
+    function UserProcessUpload() {
+      var uploadInfo = document.getElementById("UserUpload");
+      if ("files" in uploadInfo) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          var jsonObj = JSON.parse(event.target.result);
+
+          /* put your code here, whatever you need to do with jsonObj */
+          for (var i = 0; i <= jsonObj.length; i++) {
+            UserDatabaseRef.push(jsonObj[i]);
+          }
+        };
+
+        /* file is an array and we are interested only in the first element */
+        reader.readAsText(uploadInfo.files[0]);
+      }
+    }
+
+    //upload capital data
+    function CapitalDataProcessUpload() {
+      var uploadInfo = document.getElementById("CapitalDataUpload");
+      if ("files" in uploadInfo) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          var jsonObj = JSON.parse(event.target.result);
+
+          /* put your code here, whatever you need to do with jsonObj */
+          for (var i = 0; i <= jsonObj.length; i++) {
+            CapitalDatabaseRef.push(jsonObj[i]);
+          }
+        };
+
+        /* file is an array and we are interested only in the first element */
+        reader.readAsText(uploadInfo.files[0]);
+      }
+    }
+
+  </script>
+
+  <div id="UserFileUploadDiv">
+    <input id="UserUpload" type="file">
+    <button onclick="UserProcessUpload()">Upload Users</button>
+  </div>
+
+  <div id="CapitalDataFileUploadDiv">
+    <input id="CapitalDataUpload" type="file">
+    <button onclick="CapitalDataProcessUpload()">Upload Capitals</button>
+  </div>
+
   <div id="map"></div>
+
   <script>
 
     var markers = [];
 
     function initMap() {
-
-      
-
       // Create a new StyledMapType object, passing it an array of styles,
       // and the name to be displayed on the map type control.
       var styledMapType = new google.maps.StyledMapType(
@@ -309,6 +388,7 @@
       function clearMarkers() {
         setMapOnAll(null);
       }
+
       function setMapOnAll(map) {
         for (var i = 0; i < markers.length; i++) {
           markers[i].setMap(map);
@@ -317,12 +397,11 @@
 
     }
 
-
-
-
   </script>
+
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClJ73vBth_91Emw0gzXDyeSaGdzVAY_j8&callback=initMap"
     async defer></script>
+
 </body>
 
 </html>

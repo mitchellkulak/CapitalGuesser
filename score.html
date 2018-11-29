@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Capital Guesser | High Scores</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+
+    <div id="navBar">
+        <ul>
+            <li>Game</li>
+            <li>High Score</li>
+            <li>Profile</li>
+        </ul>
+    </div>
+
+    <div id="scoreTable"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyApQJhDBdHM_OPLpiYG5jr6bYNgeH0Oqmo",
+            authDomain: "capitalguesser-98105.firebaseapp.com",
+            databaseURL: "https://capitalguesser-98105.firebaseio.com",
+            projectId: "capitalguesser-98105",
+            storageBucket: "capitalguesser-98105.appspot.com",
+            messagingSenderId: "211259741975"
+        };
+        firebase.initializeApp(config);
+        var UserDatabaseRef = firebase.database().ref("Users");
+
+        // Retrieve new posts as they are added to our database
+    UserDatabaseRef.on("child_added", function (snapshot, prevChildKey) {
+        var newPost = snapshot.val();
+        console.log(newPost.name);
+
+        allKeys.push(snapshot.key);
+
+        var newRow = document.createElement('TR');
+        newRow.id = snapshot.key;
+
+        var newCell1 = document.createElement('TD');
+        newCell1.innerHTML = newPost.name;
+
+        var newCell2 = document.createElement('TD');
+        newCell2.innerHTML = normalize(newPost.phone);
+
+        var newCell3 = document.createElement('TD');
+        newCell3.innerHTML = newPost.age;
+
+        var btn = document.createElement("BUTTON");
+        btn.onclick = DevareBtnHandler;
+
+        var t = document.createTextNode("Delete");
+        btn.appendChild(t);
+
+        var newCell4 = document.createElement('TD');
+        newCell4.appendChild(btn);
+
+        newRow.appendChild(newCell1);
+        newRow.appendChild(newCell2);
+        newRow.appendChild(newCell3);
+        newRow.appendChild(newCell4);
+
+        var thisTableBody = document.getElementById("tbodyID");
+        thisTableBody.appendChild(newRow);
+
+        var thisTable = document.getElementById("thisTable");
+        thisTable.appendChild(thisTableBody);
+
+        var friendObj = new Object();
+        friendObj.name = newPost.name;
+        friendObj.phone = newPost.phone;
+        friendObj.age = newPost.age;
+        allFriends.push(friendObj);
+        console.log(friendObj);
+    });
+    </script>
+
+</body>
+
+</html>
