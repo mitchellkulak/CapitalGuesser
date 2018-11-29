@@ -11,14 +11,15 @@
 <body onload="CreateTable()">
 
     <div id="navBar">
+        <h1 id="title">World Capital Guesser</h1>
         <ul>
-            <li>Game</li>
-            <li>High Score</li>
-            <li>Profile</li>
+            <li><a href="index.html">Game</a></li>
+            <li><a href="score.html">High Scores</a></li>
+            <li><a href="profile.html">Profile</a></li>
         </ul>
     </div>
 
-    <div id="scoreTable"></div>
+    <div id="scoreTableDiv"></div>
 
     <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
 
@@ -34,20 +35,30 @@
         };
         firebase.initializeApp(config);
         var UserDatabaseRef = firebase.database().ref("Users");
-
+        var allKeys = [];
+        var allScores = [];
         // Retrieve new posts as they are added to our database
         UserDatabaseRef.on("child_added", function (snapshot, prevChildKey) {
             var newPost = snapshot.val();
-            console.log(newPost.username);
-            console.log(newPost.high_score);
+            //console.log(newPost.username);
+            //console.log(newPost.high_score);
 
             allKeys.push(snapshot.key);
+
+            //var scoresRef = db.ref("scores");
+            /*UserDatabaseRef.orderByValue().on("value", function (snapshot) {
+                snapshot.forEach(function (data) {
+                    console.log("The " + data.key + " dinosaur's score is " + data.val());
+                    console.log(data.val().high_score);
+                    if (data.val().high_score)
+                });
+            });*/
 
             var newRow = document.createElement('TR');
             newRow.id = snapshot.key;
 
             var newCell1 = document.createElement('TD');
-            newCell1.innerHTML = newPost.name;
+            newCell1.innerHTML = newPost.username;
 
             var newCell2 = document.createElement('TD');
             newCell2.innerHTML = newPost.high_score;
@@ -58,23 +69,26 @@
             var thisTableBody = document.getElementById("tbodyID");
             thisTableBody.appendChild(newRow);
 
-            var thisTable = document.getElementById("thisTable");
+            var thisTable = document.getElementById("scoreTable");
             thisTable.appendChild(thisTableBody);
 
-            var friendObj = new Object();
-            friendObj.name = newPost.username;
-            friendObj.phone = newPost.high_score;
-            allFriends.push(friendObj);
+            var scoreObj = new Object();
+            scoreObj.username = newPost.username;
+            scoreObj.high_score = newPost.high_score;
+            allScores.push(friendObj);
+            scoreObj.forEach(function (data) {
+                
+            })
             console.log(friendObj);
         });
 
         function CreateTable() {
             //Div
-            const myTableDiv = document.getElementById("theDiv");
+            var myTableDiv = document.getElementById("scoreTableDiv");
 
             //table
-            const myTable = document.createElement("table");
-            myTable.id = 'thisTable';
+            var myTable = document.createElement("table");
+            myTable.id = 'scoreTable';
 
             //table body
             var tbody = document.createElement("tbody");
