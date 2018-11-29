@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
-<body>
+<body onload="CreateTable()">
 
     <div id="navBar">
         <ul>
@@ -36,51 +36,72 @@
         var UserDatabaseRef = firebase.database().ref("Users");
 
         // Retrieve new posts as they are added to our database
-    UserDatabaseRef.on("child_added", function (snapshot, prevChildKey) {
-        var newPost = snapshot.val();
-        console.log(newPost.name);
+        UserDatabaseRef.on("child_added", function (snapshot, prevChildKey) {
+            var newPost = snapshot.val();
+            console.log(newPost.username);
+            console.log(newPost.high_score);
 
-        allKeys.push(snapshot.key);
+            allKeys.push(snapshot.key);
 
-        var newRow = document.createElement('TR');
-        newRow.id = snapshot.key;
+            var newRow = document.createElement('TR');
+            newRow.id = snapshot.key;
 
-        var newCell1 = document.createElement('TD');
-        newCell1.innerHTML = newPost.name;
+            var newCell1 = document.createElement('TD');
+            newCell1.innerHTML = newPost.name;
 
-        var newCell2 = document.createElement('TD');
-        newCell2.innerHTML = normalize(newPost.phone);
+            var newCell2 = document.createElement('TD');
+            newCell2.innerHTML = newPost.high_score;
 
-        var newCell3 = document.createElement('TD');
-        newCell3.innerHTML = newPost.age;
+            newRow.appendChild(newCell1);
+            newRow.appendChild(newCell2);
 
-        var btn = document.createElement("BUTTON");
-        btn.onclick = DevareBtnHandler;
+            var thisTableBody = document.getElementById("tbodyID");
+            thisTableBody.appendChild(newRow);
 
-        var t = document.createTextNode("Delete");
-        btn.appendChild(t);
+            var thisTable = document.getElementById("thisTable");
+            thisTable.appendChild(thisTableBody);
 
-        var newCell4 = document.createElement('TD');
-        newCell4.appendChild(btn);
+            var friendObj = new Object();
+            friendObj.name = newPost.username;
+            friendObj.phone = newPost.high_score;
+            allFriends.push(friendObj);
+            console.log(friendObj);
+        });
 
-        newRow.appendChild(newCell1);
-        newRow.appendChild(newCell2);
-        newRow.appendChild(newCell3);
-        newRow.appendChild(newCell4);
+        function CreateTable() {
+            //Div
+            const myTableDiv = document.getElementById("theDiv");
 
-        var thisTableBody = document.getElementById("tbodyID");
-        thisTableBody.appendChild(newRow);
+            //table
+            const myTable = document.createElement("table");
+            myTable.id = 'thisTable';
 
-        var thisTable = document.getElementById("thisTable");
-        thisTable.appendChild(thisTableBody);
+            //table body
+            var tbody = document.createElement("tbody");
+            tbody.id = "tbodyID";
 
-        var friendObj = new Object();
-        friendObj.name = newPost.name;
-        friendObj.phone = newPost.phone;
-        friendObj.age = newPost.age;
-        allFriends.push(friendObj);
-        console.log(friendObj);
-    });
+            //header row
+            var row1 = document.createElement('TR');
+
+            //Username heading
+            var h1 = document.createElement('TH');
+            h1.innerHTML = 'Username';
+            row1.appendChild(h1);
+
+            //score heading
+            var h2 = document.createElement('TH');
+            h2.innerHTML = 'Score';
+            row1.appendChild(h2);
+
+            //add header row to table
+            myTable.appendChild(row1);
+
+            //add tbody to table
+            myTable.appendChild(tbody);
+
+            //add table to div 
+            myTableDiv.appendChild(myTable);
+        }
     </script>
 
 </body>
