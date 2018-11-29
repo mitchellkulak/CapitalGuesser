@@ -9,9 +9,13 @@
 </head>
 
 <body>
-  
+
   <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
-  
+
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClJ73vBth_91Emw0gzXDyeSaGdzVAY_j8&callback=initMap"
+    async defer></script>
+
   <script>
     // Initialize Firebase
     var config = {
@@ -40,68 +44,7 @@
       }
     };
     */
-    //upload users
-    function UserProcessUpload() {
-      var uploadInfo = document.getElementById("UserUpload");
-      if ("files" in uploadInfo) {
-        var reader = new FileReader();
-        reader.onload = function (event) {
-          var jsonObj = JSON.parse(event.target.result);
 
-          /* put your code here, whatever you need to do with jsonObj */
-          for (var i = 0; i <= jsonObj.length; i++) {
-            UserDatabaseRef.push(jsonObj[i]);
-          }
-        };
-
-        /* file is an array and we are interested only in the first element */
-        reader.readAsText(uploadInfo.files[0]);
-      }
-    }
-
-    //upload capital data
-    function CapitalDataProcessUpload() {
-      var uploadInfo = document.getElementById("CapitalDataUpload");
-      if ("files" in uploadInfo) {
-        var reader = new FileReader();
-        reader.onload = function (event) {
-          var jsonObj = JSON.parse(event.target.result);
-
-          /* put your code here, whatever you need to do with jsonObj */
-          for (var i = 0; i <= jsonObj.length; i++) {
-            CapitalDatabaseRef.push(jsonObj[i]);
-          }
-        };
-
-        /* file is an array and we are interested only in the first element */
-        reader.readAsText(uploadInfo.files[0]);
-      }
-    }
-
-  </script>
-
-  <!-- <div id="UserFileUploadDiv">
-    <input id="UserUpload" type="file">
-    <button onclick="UserProcessUpload()">Upload Users</button>
-  </div>
-
-  <div id="CapitalDataFileUploadDiv">
-    <input id="CapitalDataUpload" type="file">
-    <button onclick="CapitalDataProcessUpload()">Upload Capitals</button>
-  </div> -->
-
-  <div id="navBar">
-    <h1 id="title">World Capital Guesser</h1>
-    <ul>
-      <li class="navItem"><a class="navItem" href="index.html">Game</a></li>
-      <li class="navItem"><a class="navItem" href="score.html">High Scores</a></li>
-      <li class="navItem"><a class="navItem" href="profile.html">Profile</a></li>
-    </ul>
-  </div>
-
-  <div id="map"></div>
-
-  <script>
 
     var markers = [];
 
@@ -367,8 +310,6 @@
       map.setMapTypeId('styled_map');
 
       google.maps.event.addListener(map, 'click', function (event) {
-        console.log(markers[0]);
-        clearMarkers();
         placeMarker(event.latLng);
       });
 
@@ -377,6 +318,7 @@
           position: location,
           map: map
         });
+        clearMarkers();
         markers.push(marker);
       }
 
@@ -392,10 +334,81 @@
 
     }
 
+    //upload users
+    function UserProcessUpload() {
+      var uploadInfo = document.getElementById("UserUpload");
+      if ("files" in uploadInfo) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          var jsonObj = JSON.parse(event.target.result);
+
+          /* put your code here, whatever you need to do with jsonObj */
+          for (var i = 0; i <= jsonObj.length; i++) {
+            UserDatabaseRef.push(jsonObj[i]);
+          }
+        };
+
+        /* file is an array and we are interested only in the first element */
+        reader.readAsText(uploadInfo.files[0]);
+      }
+    }
+
+    //upload capital data
+    function CapitalDataProcessUpload() {
+      var uploadInfo = document.getElementById("CapitalDataUpload");
+      if ("files" in uploadInfo) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          var jsonObj = JSON.parse(event.target.result);
+
+          /* put your code here, whatever you need to do with jsonObj */
+          for (var i = 0; i <= jsonObj.length; i++) {
+            CapitalDatabaseRef.push(jsonObj[i]);
+          }
+        };
+
+        /* file is an array and we are interested only in the first element */
+        reader.readAsText(uploadInfo.files[0]);
+      }
+    }
+
+    function submitAnswer() {
+      console.log(markers[markers.length - 1].position.lat());
+      
+      console.log(markers[markers.length - 1].position.lng());
+      
+      //console.log(markers[0].position.lng());
+    }
+
   </script>
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClJ73vBth_91Emw0gzXDyeSaGdzVAY_j8&callback=initMap"
-    async defer></script>
+  <!-- <div id="UserFileUploadDiv">
+    <input id="UserUpload" type="file">
+    <button onclick="UserProcessUpload()">Upload Users</button>
+  </div>
+
+  <div id="CapitalDataFileUploadDiv">
+    <input id="CapitalDataUpload" type="file">
+    <button onclick="CapitalDataProcessUpload()">Upload Capitals</button>
+  </div> -->
+
+  <div id="navBar">
+    <h1 id="title">World Capital Guesser</h1>
+    <ul>
+      <li class="navItem"><a class="navItem" href="index.html">Game</a></li>
+      <li class="navItem"><a class="navItem" href="score.html">High Scores</a></li>
+      <li class="navItem"><a class="navItem" href="profile.html">Profile</a></li>
+    </ul>
+  </div>
+
+  <div id="targetCapitalDiv">Find: <p id="capitalName">Washington DC</p> <br> <br> Capital of: <p id="countryName">United
+      States</p>
+  </div>
+
+  <button id="submitCapital" onclick="submitAnswer()">Submit!</button>
+
+  <div id="map"></div>
+
 
 </body>
 
