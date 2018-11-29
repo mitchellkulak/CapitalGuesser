@@ -5,23 +5,80 @@
   <title>Capital Guesser | Home</title>
   <meta name="viewport" content="initial-scale=1.0">
   <meta charset="utf-8">
-  <style>
-    /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-    #map {
-      height: 100%;
-    }
-
-    /* Optional: Makes the sample page fill the window. */
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
+<body>
+  
+  <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+  
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyApQJhDBdHM_OPLpiYG5jr6bYNgeH0Oqmo",
+      authDomain: "capitalguesser-98105.firebaseapp.com",
+      databaseURL: "https://capitalguesser-98105.firebaseio.com",
+      projectId: "capitalguesser-98105",
+      storageBucket: "capitalguesser-98105.appspot.com",
+      messagingSenderId: "211259741975"
+    };
+    firebase.initializeApp(config);
+    var UserDatabaseRef = firebase.database().ref("Users");
+    var CapitalDatabaseRef = firebase.database().ref("Capitals");
+    /*
+    // Example of a random customer generator
+    var faker = require('faker'); // Faker.js
+
+    api.customer = {
+      id: random.special(4, 8),
+      name: faker.name.findName(),
+      phone: faker.phone.phoneNumber("(###) ###-####"),
+      address: {
+        street: faker.address.streetAddress(),
+        city: faker.address.city(),
+        state: faker.address.state(),
+      }
+    };
+    */
+    //upload users
+    function UserProcessUpload() {
+      var uploadInfo = document.getElementById("UserUpload");
+      if ("files" in uploadInfo) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          var jsonObj = JSON.parse(event.target.result);
+
+          /* put your code here, whatever you need to do with jsonObj */
+          for (var i = 0; i <= jsonObj.length; i++) {
+            UserDatabaseRef.push(jsonObj[i]);
+          }
+        };
+
+        /* file is an array and we are interested only in the first element */
+        reader.readAsText(uploadInfo.files[0]);
+      }
+    }
+
+    //upload capital data
+    function CapitalDataProcessUpload() {
+      var uploadInfo = document.getElementById("CapitalDataUpload");
+      if ("files" in uploadInfo) {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          var jsonObj = JSON.parse(event.target.result);
+
+          /* put your code here, whatever you need to do with jsonObj */
+          for (var i = 0; i <= jsonObj.length; i++) {
+            CapitalDatabaseRef.push(jsonObj[i]);
+          }
+        };
+
+        /* file is an array and we are interested only in the first element */
+        reader.readAsText(uploadInfo.files[0]);
+      }
+    }
+
+<<<<<<< HEAD
 <body>
   
   <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
@@ -95,6 +152,11 @@
   </script>
 
   <div id="UserFileUploadDiv">
+=======
+  </script>
+
+  <!-- <div id="UserFileUploadDiv">
+>>>>>>> b721667f46b00ff1764d4f09dff39b14e7e666a9
     <input id="UserUpload" type="file">
     <button onclick="UserProcessUpload()">Upload Users</button>
   </div>
@@ -102,6 +164,18 @@
   <div id="CapitalDataFileUploadDiv">
     <input id="CapitalDataUpload" type="file">
     <button onclick="CapitalDataProcessUpload()">Upload Capitals</button>
+<<<<<<< HEAD
+=======
+  </div> -->
+
+  <div id="navBar">
+    <h1 id="title">World Capital Guesser</h1>
+    <ul>
+      <li><a href="index.html">Game</a></li>
+      <li><a href="score.html">High Scores</a></li>
+      <li><a href="profile.html">Profile</a></li>
+    </ul>
+>>>>>>> b721667f46b00ff1764d4f09dff39b14e7e666a9
   </div>
 
   <div id="map"></div>
@@ -357,8 +431,8 @@
       // Create a map object, and include the MapTypeId to add
       // to the map type control.
       var map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 55.647, lng: 37.581 },
-        zoom: 11,
+        center: { lat: 43.6, lng: -83.1 },
+        zoom: 7,
         disableDefaultUI: true,
         mapTypeControlOptions: {
           mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
