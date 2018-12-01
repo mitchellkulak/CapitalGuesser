@@ -21,9 +21,28 @@
     </div>
 
     <form id="login">
+        <label>Username</label>
         <input type="text" id="username">
+        <label>Password</label>
         <input type="text" id="password">
+        <input type="button" id="btnLogin" value="Login">
     </form>
 
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+    
+    <script>
+        var config = {
+            apiKey: "AIzaSyApQJhDBdHM_OPLpiYG5jr6bYNgeH0Oqmo",
+            authDomain: "capitalguesser-98105.firebaseapp.com",
+            databaseURL: "https://capitalguesser-98105.firebaseio.com",
+            projectId: "capitalguesser-98105",
+            storageBucket: "capitalguesser-98105.appspot.com",
+            messagingSenderId: "211259741975"
+        };
+        firebase.initializeApp(config);
+        var UserDatabaseRef = firebase.database().ref("Users");
+    </script>
+
 </body>
+
 </html>
