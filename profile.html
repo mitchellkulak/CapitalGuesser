@@ -19,6 +19,106 @@
         </ul>
     </div>
 
+    <div id="userDataDiv"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyApQJhDBdHM_OPLpiYG5jr6bYNgeH0Oqmo",
+            authDomain: "capitalguesser-98105.firebaseapp.com",
+            databaseURL: "https://capitalguesser-98105.firebaseio.com",
+            projectId: "capitalguesser-98105",
+            storageBucket: "capitalguesser-98105.appspot.com",
+            messagingSenderId: "211259741975"
+        };
+        firebase.initializeApp(config);
+        var UserDatabaseRef = firebase.database().ref("Users");
+        var allKeys = [];
+        var allScores = [];
+        // Retrieve new posts as they are added to our database
+        UserDatabaseRef.orderByChild('high_score').on("child_added", function (snapshot) {
+            var newPost = snapshot.val();
+            //console.log(newPost.username);
+            //console.log(newPost.high_score);
+
+            allKeys.push(snapshot.key);
+
+            var newRow = document.createElement('TR');
+            newRow.id = snapshot.key;
+
+            var newCell1 = document.createElement('TD');
+            newCell1.innerHTML = newPost.first_name;
+
+            var newCell2 = document.createElement('TD');
+            newCell2.innerHTML = newPost.last_name;
+
+            var newCell3 = document.createElement('TD');
+            newCell3.innerHTML = newPost.email;
+
+            var newCell4 = document.createElement('TD');
+            newCell4.innerHTML = newPost.username;
+
+            newRow.appendChild(newCell1);
+            newRow.appendChild(newCell2);
+            newRow.appendChild(newCell3);
+            newRow.appendChild(newCell4);
+
+            var thisTableBody = document.getElementById("tbodyID");
+            thisTableBody.appendChild(newRow);
+
+            var thisTable = document.getElementById("scoreTable");
+            thisTable.appendChild(thisTableBody);
+
+
+
+        });
+        function CreateTable() {
+            //Div
+            var myTableDiv = document.getElementById("userDataDiv");
+
+            //table
+            var myTable = document.createElement("table");
+            myTable.id = 'scoreTable';
+
+            //table body
+            var tbody = document.createElement("tbody");
+            tbody.id = "tbodyID";
+
+            //header row
+            var row1 = document.createElement('TR');
+
+            //first name
+            var h1 = document.createElement('TH');
+            h1.innerHTML = 'First Name';
+            row1.appendChild(h1);
+
+            //last name
+            var h2 = document.createElement('TH');
+            h2.innerHTML = 'last Name';
+            row1.appendChild(h2);
+
+            //email
+            var h3 = document.createElement('TH');
+            h3.innerHTML = 'Email';
+            row1.appendChild(h3);
+
+            //username
+            var h4 = document.createElement('TH');
+            h4.innerHTML = 'Username';
+            row1.appendChild(h4);
+
+            //add header row to table
+            myTable.appendChild(row1);
+
+            //add tbody to table
+            myTable.appendChild(tbody);
+
+            //add table to div 
+            myTableDiv.appendChild(myTable);
+        }
+    </script>
 </body>
 
 </html>
