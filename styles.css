@@ -47,6 +47,20 @@
  }
 
  #submitCapital{
+    display:none;
+    background-color:darkslateblue;
+    border-radius: 25px;
+    color:#ffffff;
+    padding: 20px; 
+    margin:15px;
+    position: absolute;
+    bottom:15%;
+    right:7%;
+    z-index:99;
+    font-size:22px;
+ }
+
+ #startButton{
     background-color:darkslateblue;
     border-radius: 25px;
     color:#ffffff;
@@ -60,6 +74,7 @@
  }
 
  #targetCapitalDiv{
+    display:none;
     background-color:darkslateblue;
     border-radius: 25px;
     color:#ffffff;

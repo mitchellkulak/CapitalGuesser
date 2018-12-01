@@ -29,6 +29,12 @@
     firebase.initializeApp(config);
     var UserDatabaseRef = firebase.database().ref("Users");
     var CapitalDatabaseRef = firebase.database().ref("Capitals");
+
+    var capitals = [];
+    CapitalDatabaseRef.on("child_added", function (snapshot, prevChildKey) {
+      var newCapital = snapshot.val();
+      capitals.push(newCapital);
+    });
     /*
     // Example of a random customer generator
     var faker = require('faker'); // Faker.js
@@ -45,8 +51,10 @@
     };
     */
 
-
     var markers = [];
+    var currentCountryIndex = 0;
+    var totalScore = 0;
+    var tries = 0;
 
     function initMap() {
       // Create a new StyledMapType object, passing it an array of styles,
@@ -372,12 +380,43 @@
       }
     }
 
+    function generateNewTarget(){
+      var submitButton = document.getElementById("submitCapital");
+      var startButton = document.getElementById("startButton");
+      var targetCapitalDiv = document.getElementById("targetCapitalDiv");
+      var capitalName = document.getElementById("capitalName");
+      var countryName = document.getElementById("countryName");
+
+      var randomNumber = Math.floor(Math.random() * Math.floor(capitals.length));
+
+      submitButton.style.display = "initial";
+      targetCapitalDiv.style.display = "initial";
+      startButton.style.display = "none";
+
+      capitalName.innerHTML = capitals[randomNumber].CapitalName;
+      countryName.innerHTML = capitals[randomNumber].CountryName;
+
+      currentCountryIndex = randomNumber;
+
+      console.log(randomNumber);
+      console.log(capitals[randomNumber]);
+    }
+
     function submitAnswer() {
-      console.log(markers[markers.length - 1].position.lat());
+      answerLat = markers[markers.length - 1].position.lat();
+      answerLng = markers[markers.length - 1].position.lng();
+      actualLat = capitals[currentCountryIndex].CapitalLatitude;
+      actualLng = capitals[currentCountryIndex].CapitalLongitude;
       
-      console.log(markers[markers.length - 1].position.lng());
+      var diffLat = answerLat - actualLat;
+      var diffLng = answerLng - actualLng;
+      var score = Math.abs((diffLat + diffLng) * 100); 
+      
+      totalScore += Math.floor(score);
+      console.log(totalScore);
       
       //console.log(markers[0].position.lng());
+      generateNewTarget();
     }
 
   </script>
@@ -401,11 +440,12 @@
     </ul>
   </div>
 
-  <div id="targetCapitalDiv">Find: <p id="capitalName">Washington DC</p> <br> <br> Capital of: <p id="countryName">United
+  <div id="targetCapitalDiv" >Find: <p id="capitalName">Washington DC</p> <br> <br> Capital of: <p id="countryName">United
       States</p>
   </div>
 
   <button id="submitCapital" onclick="submitAnswer()">Submit!</button>
+  <button id="startButton" onclick="generateNewTarget()">Start!</button>
 
   <div id="map"></div>
 
