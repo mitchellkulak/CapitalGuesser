@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Capital Guesser | High Scores</title>
+    <title>Capital Guesser | Profile</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="styles.css">
@@ -20,7 +20,7 @@
         </ul>
     </div>
 
-    <div id="scoreTableDiv"></div>
+    <div id="userDataDiv"></div>
 
     <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
 
@@ -46,39 +46,25 @@
 
             allKeys.push(snapshot.key);
 
-            //var scoresRef = db.ref("scores");
-            /*UserDatabaseRef.orderByValue().on("value", function (snapshot) {
-                snapshot.forEach(function (data) {
-                    console.log("The " + data.key + " dinosaur's score is " + data.val());
-                    console.log(data.val().high_score);
-                    if (data.val().high_score)
-                });
-            });*/
-
-            var scoreObj = new Object();
-            scoreObj.username = newPost.username;
-            scoreObj.high_score = newPost.high_score;
-            allScores.push(scoreObj);
-            allScores.forEach(function (scoreObj) {
-            
-                //console.log(scoreObj);
-                //allScores[1].sort(function(a, b){return b-a});
-               // allScores[1].sort(function(a, b){return b-a});
-            })
-
-            //UserDatabaseRef.orderBy('high_score', 'desc');
-//.limitToLast(2)
             var newRow = document.createElement('TR');
             newRow.id = snapshot.key;
 
             var newCell1 = document.createElement('TD');
-            newCell1.innerHTML = newPost.username;
+            newCell1.innerHTML = newPost.first_name;
 
             var newCell2 = document.createElement('TD');
-            newCell2.innerHTML = newPost.high_score;
+            newCell2.innerHTML = newPost.last_name;
+
+            var newCell3 = document.createElement('TD');
+            newCell3.innerHTML = newPost.email;
+
+            var newCell4 = document.createElement('TD');
+            newCell4.innerHTML = newPost.username;
 
             newRow.appendChild(newCell1);
             newRow.appendChild(newCell2);
+            newRow.appendChild(newCell3);
+            newRow.appendChild(newCell4);
 
             var thisTableBody = document.getElementById("tbodyID");
             thisTableBody.appendChild(newRow);
@@ -86,18 +72,12 @@
             var thisTable = document.getElementById("scoreTable");
             thisTable.appendChild(thisTableBody);
 
-            
-            
+
+
         });
-
-        function DataToDesc() {
-            //firebase.database().ref('Users')
-            UserDatabaseRef.orderBy('high_score').limitToLast(2);
-        }
-
         function CreateTable() {
             //Div
-            var myTableDiv = document.getElementById("scoreTableDiv");
+            var myTableDiv = document.getElementById("userDataDiv");
 
             //table
             var myTable = document.createElement("table");
@@ -110,15 +90,25 @@
             //header row
             var row1 = document.createElement('TR');
 
-            //Username heading
+            //first name
             var h1 = document.createElement('TH');
-            h1.innerHTML = 'Username';
+            h1.innerHTML = 'First Name';
             row1.appendChild(h1);
 
-            //score heading
+            //last name
             var h2 = document.createElement('TH');
-            h2.innerHTML = 'Score';
+            h2.innerHTML = 'last Name';
             row1.appendChild(h2);
+
+            //email
+            var h3 = document.createElement('TH');
+            h3.innerHTML = 'Email';
+            row1.appendChild(h3);
+
+            //username
+            var h4 = document.createElement('TH');
+            h4.innerHTML = 'Username';
+            row1.appendChild(h4);
 
             //add header row to table
             myTable.appendChild(row1);
@@ -130,7 +120,6 @@
             myTableDiv.appendChild(myTable);
         }
     </script>
-
 </body>
 
 </html>
