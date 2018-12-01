@@ -75,11 +75,11 @@
             var scoreObj = new Object();
             scoreObj.username = newPost.username;
             scoreObj.high_score = newPost.high_score;
-            allScores.push(friendObj);
-            scoreObj.forEach(function (data) {
-                
+            allScores.push(scoreObj);
+            allScores.forEach(function (scoreObj) {
+                console.log(scoreObj);
             })
-            console.log(friendObj);
+
         });
 
         function CreateTable() {
