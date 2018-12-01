@@ -38,7 +38,7 @@
         var allKeys = [];
         var allScores = [];
         // Retrieve new posts as they are added to our database
-        UserDatabaseRef.on("child_added", function (snapshot, prevChildKey) {
+        UserDatabaseRef.orderByChild('high_score').on("child_added", function (snapshot) {
             var newPost = snapshot.val();
             //console.log(newPost.username);
             //console.log(newPost.high_score);
@@ -54,6 +54,19 @@
                 });
             });*/
 
+            var scoreObj = new Object();
+            scoreObj.username = newPost.username;
+            scoreObj.high_score = newPost.high_score;
+            allScores.push(scoreObj);
+            allScores.forEach(function (scoreObj) {
+            
+                //console.log(scoreObj);
+                //allScores[1].sort(function(a, b){return b-a});
+               // allScores[1].sort(function(a, b){return b-a});
+            })
+
+            //UserDatabaseRef.orderBy('high_score', 'desc');
+//.limitToLast(2)
             var newRow = document.createElement('TR');
             newRow.id = snapshot.key;
 
@@ -72,15 +85,14 @@
             var thisTable = document.getElementById("scoreTable");
             thisTable.appendChild(thisTableBody);
 
-            var scoreObj = new Object();
-            scoreObj.username = newPost.username;
-            scoreObj.high_score = newPost.high_score;
-            allScores.push(scoreObj);
-            allScores.forEach(function (scoreObj) {
-                console.log(scoreObj);
-            })
-
+            
+            
         });
+
+        function DataToDesc() {
+            //firebase.database().ref('Users')
+            UserDatabaseRef.orderBy('high_score').limitToLast(2);
+        }
 
         function CreateTable() {
             //Div
