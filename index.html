@@ -59,12 +59,12 @@
     var totalScore = 0;
     var tries = 0;
 
-  function newHighScore(userId, highScore) {
-    console.log(userId);
-var userRef = firebase.database().ref('Users/' + userId);
-userRef.child('high_score').set(highScore);
+    function newHighScore(userId, highScore) {
+      console.log(userId);
+      var userRef = firebase.database().ref('Users/' + userId);
+      userRef.child('high_score').set(highScore);
 
-}
+    }
 
     function initMap() {
       // Create a new StyledMapType object, passing it an array of styles,
@@ -441,8 +441,8 @@ userRef.child('high_score').set(highScore);
         //window.location.href = "score.html";
         console.log(getCookie("currentUser"));
         UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
-          if(snapshot.val().high_score < totalScore){
-            newHighScore(snapshot.key,totalScore);
+          if (snapshot.val().high_score < totalScore) {
+            newHighScore(snapshot.key, totalScore);
           }
 
           var startButton = document.getElementById("startButton");
@@ -451,8 +451,9 @@ userRef.child('high_score').set(highScore);
           var targetCapitalDiv = document.getElementById("targetCapitalDiv");
           var submitButton = document.getElementById("submitCapital");
 
-          finalScoreDiv.style.display = "initial";
+          console.log("The total score will be : " + totalScore);
           finalScoreContent.innerHTML = totalScore;
+          finalScoreDiv.style.display = "initial";
           submitButton.style.display = "none";
           targetCapitalDiv.style.display = "none";
           startButton.style.display = "initial";
@@ -463,7 +464,7 @@ userRef.child('high_score').set(highScore);
           console.log(snapshot.val().email);
           console.log("yes");
         });
-        
+
 
         // ...
       }
@@ -471,89 +472,98 @@ userRef.child('high_score').set(highScore);
 
 
 
-function googleSignin() {
-   firebase.auth()
-   
-   .signInWithPopup(provider).then(function(result) {
-      var token = result.credential.accessToken;
-      var user = result.user;
-		
-      console.log(token)
-      console.log(user)
-   }).catch(function(error) {
-      var errorCode = error.code;
-      var errorMessage = error.message;
+    function googleSignin() {
+      firebase.auth()
 
-      console.log(error.code)
-      console.log(error.message)
-   });
-}
+        .signInWithPopup(provider).then(function (result) {
+          var token = result.credential.accessToken;
+          var user = result.user;
 
-function googleSignout() {
-   firebase.auth().signOut()
-	
-   .then(function() {
-      console.log('Signout Succesfull')
-   }, function(error) {
-      console.log('Signout Failed')  
-   });
-}
+          console.log(token)
+          console.log(user)
+        }).catch(function (error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
 
-var firstCallFlag = 0;
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    if(firstCallFlag == 0){
-        firstCallFlag = 1;
-    }else{
+          console.log(error.code)
+          console.log(error.message)
+        });
+    }
 
-    // User is signed in.
-    var displayName = user.displayName;
-    var email = user.email;
-    var emailVerified = user.emailVerified;
-    var photoURL = user.photoURL;
-    var isAnonymous = user.isAnonymous;
-    var uid = user.uid;
-    document.cookie = "currentUser=" + uid;
-    console.log("SIGNED IN - " + uid);
-    var providerData = user.providerData;
-    // ...
+    function googleSignout() {
+      firebase.auth().signOut()
 
-    UserDatabaseRef.orderByChild("uid").equalTo(uid).on("child_added", function (snapshot) {
-          return;
+        .then(function () {
+          console.log('Signout Succesfull')
+        }, function (error) {
+          console.log('Signout Failed')
+        });
+    }
+    var alreadyExists = false;
+    var firstCallFlag = 0;
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+          if(firstCallFlag == 0){
+            firstCallFlag = 1;
+          }
+          else{
+
+          
+
+          // User is signed in.
+          var displayName = user.displayName;
+          var email = user.email;
+          var emailVerified = user.emailVerified;
+          var photoURL = user.photoURL;
+          var isAnonymous = user.isAnonymous;
+          var uid = user.uid;
+          document.cookie = "currentUser=" + uid;
+          console.log("SIGNED IN - " + uid);
+          var providerData = user.providerData;
+          // ...
+         
+          UserDatabaseRef.orderByChild("uid").equalTo(uid).on("child_added", function (snapshot) {
+            console.log("Q U E R Y  H I T");
+            alreadyExists = true;
+          });
+      
+
+          if (alreadyExists == false) {
+            console.log("User does not already exist. Creating new user.");
+            var obj = {};
+            obj.email = email;
+            obj.uid = uid;
+            obj.userName = displayName;
+            obj.high_score = 1;
+            UserDatabaseRef.push(obj);
+          }
+          
+      }
+          
+      } else {
+        // User is signed out.
+        // ...
+      }
     });
 
-    var obj = {};
-    obj.email = email;
-    obj.uid = uid;
-    obj.userName = displayName;
-    obj.high_score = 1;
-    UserDatabaseRef.push(obj);
-   
-}
-  } else {
-    // User is signed out.
-    // ...
-  }
-});
 
 
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0) == ' ') {
-            c = c.substring(1);
+          c = c.substring(1);
         }
         if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
+          return c.substring(name.length, c.length);
         }
+      }
+      return "";
     }
-    return "";
-}
-    
+
 
   </script>
 
@@ -573,7 +583,7 @@ function getCookie(cname) {
       <li class="navItem"><a class="navItem" href="index.html">Game</a></li>
       <li class="navItem"><a class="navItem" href="score.html">High Scores</a></li>
       <li class="navItem"><a class="navItem" href="profile.html">Profile</a></li>
-      <input type="image" id="signIn" onclick = "googleSignin()" src="googleSignin.png" />
+      <input type="image" id="signIn" onclick="googleSignin()" src="googleSignin.png" />
       <!-- <button id="signOut" onclick = "googleSignout()">Google Signout</button> -->
     </ul>
   </div>
