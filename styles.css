@@ -95,13 +95,11 @@
  #countryName{
     display:inline;
  }
-<<<<<<< HEAD
 
  #crudProfileDiv {
      display: block;
      align-content: left;
  }
-=======
  #finalScoreDiv{
     display:none;
     background-color:darkslateblue;
@@ -132,4 +130,3 @@
     top:0;
     right:0;
 }
->>>>>>> a9499674f359ea8668d277d742b33d85a00b9b66

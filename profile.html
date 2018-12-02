@@ -139,10 +139,7 @@
         }
 
         function readAndDisplayUserData() {
-            // UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")) {
 
-
-            //var userId = firebase.auth().currentUser.uid;
             UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
                 //UserDatabaseRef.once('').then(function (snapshot) {
                 var name = snapshot.val().name;
