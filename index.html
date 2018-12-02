@@ -29,6 +29,7 @@
     firebase.initializeApp(config);
     var UserDatabaseRef = firebase.database().ref("Users");
     var CapitalDatabaseRef = firebase.database().ref("Capitals");
+    var provider = new firebase.auth.GoogleAuthProvider();
 
     var capitals = [];
     CapitalDatabaseRef.on("child_added", function (snapshot, prevChildKey) {
@@ -426,7 +427,7 @@ userRef.child('high_score').set(highScore);
       console.log("Difference in Lat: " + diffLat);
       console.log("Difference in Lng: " + diffLng);
 
-      var score = 4000 - Math.abs(((diffLat * 2) + diffLng) * 15);
+      var score = 5000 - Math.abs(((diffLat * 2) + diffLng) * 20);
 
       totalScore += Math.floor(score);
       console.log(totalScore);
@@ -443,6 +444,22 @@ userRef.child('high_score').set(highScore);
           if(snapshot.val().high_score < totalScore){
             newHighScore(snapshot.key,totalScore);
           }
+
+          var startButton = document.getElementById("startButton");
+          var finalScoreDiv = document.getElementById("finalScoreDiv");
+          var finalScoreContent = document.getElementById("finalScoreContent");
+          var targetCapitalDiv = document.getElementById("targetCapitalDiv");
+          var submitButton = document.getElementById("submitCapital");
+
+          finalScoreDiv.style.display = "initial";
+          finalScoreContent.innerHTML = totalScore;
+          submitButton.style.display = "none";
+          targetCapitalDiv.style.display = "none";
+          startButton.style.display = "initial";
+
+          tries = 0;
+          totalScore = 0;
+
           console.log(snapshot.val().email);
           console.log("yes");
         });
@@ -451,6 +468,74 @@ userRef.child('high_score').set(highScore);
         // ...
       }
     }
+
+
+
+function googleSignin() {
+   firebase.auth()
+   
+   .signInWithPopup(provider).then(function(result) {
+      var token = result.credential.accessToken;
+      var user = result.user;
+		
+      console.log(token)
+      console.log(user)
+   }).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+
+      console.log(error.code)
+      console.log(error.message)
+   });
+}
+
+function googleSignout() {
+   firebase.auth().signOut()
+	
+   .then(function() {
+      console.log('Signout Succesfull')
+   }, function(error) {
+      console.log('Signout Failed')  
+   });
+}
+
+var firstCallFlag = 0;
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    if(firstCallFlag == 0){
+        firstCallFlag = 1;
+    }else{
+
+    // User is signed in.
+    var displayName = user.displayName;
+    var email = user.email;
+    var emailVerified = user.emailVerified;
+    var photoURL = user.photoURL;
+    var isAnonymous = user.isAnonymous;
+    var uid = user.uid;
+    document.cookie = "currentUser=" + uid;
+    console.log("SIGNED IN - " + uid);
+    var providerData = user.providerData;
+    // ...
+
+    UserDatabaseRef.orderByChild("uid").equalTo(uid).on("child_added", function (snapshot) {
+          return;
+    });
+
+    var obj = {};
+    obj.email = email;
+    obj.uid = uid;
+    obj.userName = displayName;
+    obj.high_score = 1;
+    UserDatabaseRef.push(obj);
+   
+}
+  } else {
+    // User is signed out.
+    // ...
+  }
+});
+
 
 
 function getCookie(cname) {
@@ -488,14 +573,15 @@ function getCookie(cname) {
       <li class="navItem"><a class="navItem" href="index.html">Game</a></li>
       <li class="navItem"><a class="navItem" href="score.html">High Scores</a></li>
       <li class="navItem"><a class="navItem" href="profile.html">Profile</a></li>
-      <li><a href="login.html">Login</a></li>
+      <input type="image" id="signIn" onclick = "googleSignin()" src="googleSignin.png" />
+      <!-- <button id="signOut" onclick = "googleSignout()">Google Signout</button> -->
     </ul>
   </div>
 
   <div id="targetCapitalDiv">Find: <p id="capitalName">Washington DC</p> <br> <br> Capital of: <p id="countryName">United
       States</p>
   </div>
-
+  <div id="finalScoreDiv">Your total score was <p id="finalScoreContent">0</p>. Thanks for playing!</div>
   <button id="submitCapital" onclick="submitAnswer()">Submit!</button>
   <button id="startButton" onclick="generateNewTarget()">Start!</button>
 

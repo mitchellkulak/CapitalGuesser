@@ -12,10 +12,12 @@
      background-color: darkslateblue;
      color: #ffffff;
      height: 100px;
+     width: 50%;
      margin: auto;
-     width: 25%;
-     display:block;
+    padding-left:20%;
      font-family:Helvetica, sans-serif;
+
+     
  }
 
  ul {
@@ -93,8 +95,41 @@
  #countryName{
     display:inline;
  }
+<<<<<<< HEAD
 
  #crudProfileDiv {
      display: block;
      align-content: left;
  }
+=======
+ #finalScoreDiv{
+    display:none;
+    background-color:darkslateblue;
+    border-radius: 25px;
+    color:#ffffff;
+    padding: 20px; 
+    margin:15px;
+    position: absolute;
+    bottom:20%;
+    right:60%;
+    z-index:99;
+    font-size:20px;
+ }
+ #finalScoreContent{
+     display:inline;
+ }
+ #signIn{
+     position:absolute;
+     top:0;
+     right:0;
+     margin:20px;
+     padding:10px;
+ }
+
+ #signOut{
+    display:none;
+    position:absolute;
+    top:0;
+    right:0;
+}
+>>>>>>> a9499674f359ea8668d277d742b33d85a00b9b66
