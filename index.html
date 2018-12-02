@@ -35,6 +35,8 @@
       var newCapital = snapshot.val();
       capitals.push(newCapital);
     });
+
+
     /*
     // Example of a random customer generator
     var faker = require('faker'); // Faker.js
@@ -55,6 +57,13 @@
     var currentCountryIndex = 0;
     var totalScore = 0;
     var tries = 0;
+
+  function newHighScore(userId, highScore) {
+    console.log(userId);
+var userRef = firebase.database().ref('Users/' + userId);
+userRef.child('high_score').set(highScore);
+
+}
 
     function initMap() {
       // Create a new StyledMapType object, passing it an array of styles,
@@ -380,7 +389,7 @@
       }
     }
 
-    function generateNewTarget(){
+    function generateNewTarget() {
       var submitButton = document.getElementById("submitCapital");
       var startButton = document.getElementById("startButton");
       var targetCapitalDiv = document.getElementById("targetCapitalDiv");
@@ -410,27 +419,56 @@
       console.log("Answer Lng: " + answerLng);
       console.log("Actual Lat: " + actualLat);
       console.log("Actual Lng: " + actualLng);
-      
+
       var diffLat = Math.abs(answerLat - actualLat);
       var diffLng = Math.abs(answerLng - actualLng);
 
       console.log("Difference in Lat: " + diffLat);
       console.log("Difference in Lng: " + diffLng);
 
-      var score = 3000 - Math.abs(((diffLat * 2) + diffLng) * 15); 
-      
+      var score = 4000 - Math.abs(((diffLat * 2) + diffLng) * 15);
+
       totalScore += Math.floor(score);
       console.log(totalScore);
       tries++;
-      
+
       //console.log(markers[0].position.lng());
-      if(tries<5){
-          generateNewTarget();
+      if (tries < 5) {
+        generateNewTarget();
       }
-      else{
-        window.location.href = "score.html";
+      else {
+        //window.location.href = "score.html";
+        console.log(getCookie("currentUser"));
+        UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
+          if(snapshot.val().high_score < totalScore){
+            newHighScore(snapshot.key,totalScore);
+          }
+          console.log(snapshot.val().email);
+          console.log("yes");
+        });
+        
+
+        // ...
       }
     }
+
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+    
 
   </script>
 
@@ -454,7 +492,7 @@
     </ul>
   </div>
 
-  <div id="targetCapitalDiv" >Find: <p id="capitalName">Washington DC</p> <br> <br> Capital of: <p id="countryName">United
+  <div id="targetCapitalDiv">Find: <p id="capitalName">Washington DC</p> <br> <br> Capital of: <p id="countryName">United
       States</p>
   </div>
 
