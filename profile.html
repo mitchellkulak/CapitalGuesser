@@ -16,7 +16,6 @@
             <li><a href="index.html">Game</a></li>
             <li><a href="score.html">High Scores</a></li>
             <li><a href="profile.html">Profile</a></li>
-            <li><a href="login.html">Login</a></li>
         </ul>
     </div>
 
@@ -121,8 +120,12 @@
             row1.appendChild(h3);
 
             var h4 = document.createElement('TH');
-            h4.innerHTML = 'High Score';
+            h4.innerHTML = 'Home Country';
             row1.appendChild(h4);
+
+            var h5 = document.createElement('TH');
+            h5.innerHTML = 'High Score';
+            row1.appendChild(h5);
 
 
             //add header row to table
@@ -146,7 +149,7 @@
                 var email = snapshot.val().email;
                 var high_score = snapshot.val().high_score;
                 var home_town = snapshot.val().home_town;
-                //var uid = snapshot.val().uid;
+                var home_country = snapshot.val().home_country;
                 //console.log(name);
                 //console.log(email);
 
@@ -154,31 +157,33 @@
                 var txtEmail = document.getElementById("email");
                 var txtHighScore = document.getElementById("high_score");
                 var txthomeTown = document.getElementById("homeTown");
-                //var txtUid = document.getElementById("uid");
+                var txtCountry = document.getElementById("homeCountry");
 
                 txtName.value = name;
                 txtEmail.value = email;
                 txtHighScore.value = high_score;
                 txthomeTown.value = home_town;
-                //txtUid.value = uid;
+                txtCountry.value = home_town;
             });
 
         }
         //}
 
         function writeUserData() {
-            
+
             var txtName = document.getElementById("name");
             var txtEmail = document.getElementById("email");
             var txtHomeTown = document.getElementById("homeTown");
+            var txtHomeTown = document.getElementById("homeCountry");
 
-            UserDatabaseRef.set({
+            UserDatabaseRef.push({
                 name: txtName.innerHTML,
                 email: txtEmail.innerHTML,
-                home_town: txtHomeTown.innerHTML
+                home_town: txtHomeTown.innerHTML,
+                home_country: txtHomeCountry.innerHTML
             });
 
-            
+
         }
         //TODO
         function writeNewPost(uid, username, picture, title, body) {
@@ -224,6 +229,10 @@
         <label>Home Town:</label>
         <br>
         <input type="text" name="homeTown" id="homeTown">
+        <br>
+        <label>Home Country:</label>
+        <br>
+        <input type="text" name="homeCountry" id="homeCountry">
         <!--<br>
         <label>Uid:</label>
         <input type="text" name="uid" readonly id="uid">-->
