@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
-<body onload="CreateTable()">
+<body onload="CreateTable(), readAndDisplayUserData()">
 
     <div id="navBar">
         <h1 id="title">World Capital Guesser</h1>
@@ -25,6 +25,23 @@
     <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
 
     <script>
+        //TODO:
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
         // Initialize Firebase
         var config = {
             apiKey: "AIzaSyApQJhDBdHM_OPLpiYG5jr6bYNgeH0Oqmo",
@@ -39,7 +56,7 @@
         var allKeys = [];
         var allScores = [];
         // Retrieve new posts as they are added to our database
-        UserDatabaseRef.orderByChild('high_score').on("child_added", function (snapshot) {
+        UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
             var newPost = snapshot.val();
             //console.log(newPost.username);
             //console.log(newPost.high_score);
@@ -59,7 +76,7 @@
             newCell3.innerHTML = newPost.email;
 
             var newCell4 = document.createElement('TD');
-            newCell4.innerHTML = newPost.username;
+            newCell4.innerHTML = newPost.high_score;
 
             newRow.appendChild(newCell1);
             newRow.appendChild(newCell2);
@@ -69,19 +86,17 @@
             var thisTableBody = document.getElementById("tbodyID");
             thisTableBody.appendChild(newRow);
 
-            var thisTable = document.getElementById("scoreTable");
+            var thisTable = document.getElementById("profileTable");
             thisTable.appendChild(thisTableBody);
-
-
 
         });
         function CreateTable() {
             //Div
-            var myTableDiv = document.getElementById("userDataDiv");
+            var myTableDiv = document.getElementById("profileTableDiv");
 
             //table
             var myTable = document.createElement("table");
-            myTable.id = 'scoreTable';
+            myTable.id = 'profileTable';
 
             //table body
             var tbody = document.createElement("tbody");
@@ -107,7 +122,7 @@
 
             //username
             var h4 = document.createElement('TH');
-            h4.innerHTML = 'Username';
+            h4.innerHTML = 'High Score';
             row1.appendChild(h4);
 
             //add header row to table
@@ -119,7 +134,103 @@
             //add table to div 
             myTableDiv.appendChild(myTable);
         }
+
+        function readAndDisplayUserData() {
+           // UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")) {
+
+            
+            //var userId = firebase.auth().currentUser.uid;
+            UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
+            //UserDatabaseRef.once('').then(function (snapshot) {
+                var name = snapshot.val().name;
+                var email = snapshot.val().email;
+                var high_score = snapshot.val().high_score;
+                var home_town = snapshot.val().home_town;
+
+
+            });
+            console.log(name);
+            console.log(email);
+            
+            var txtName = document.getElementById("name");
+            var txtEmail = document.getElementById("email");
+            var txtHighScore = document.getElementById("high_score");
+            var txthomeTown = document.getElementById("homeTown");
+
+            txtName.value = name;
+            txtEmail.value = email;
+            txtHighScore.value = high_score;
+            txthomeTown.value = home_town;
+        }
+        //}
+
+        function writeUserData(name, email, homeTown) {
+            UserDatabaseRef.set({
+                name: name,
+                email: email,
+                home_town: homeTown
+            });
+
+            var txtName = document.getElementById("name");
+            var txtEmail = document.getElementById("email");
+            var txthighScore = document.getElementById("high_score");
+            var txthomeTown = document.getElementById("homeTown");
+            var txtUid = document.getElementById("uid");
+
+        }
+        //TODO
+        function writeNewPost(uid, username, picture, title, body) {
+            // A post entry.
+            var postData = {
+                author: username,
+                uid: uid,
+                body: body,
+                title: title,
+                starCount: 0,
+                authorPic: picture
+            };
+
+            // Get a key for a new Post.
+            var newPostKey = firebase.database().ref().child('posts').push().key;
+
+            // Write the new post's data simultaneously in the posts list and the user's post list.
+            var updates = {};
+            updates['/posts/' + newPostKey] = postData;
+            updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+            return firebase.database().ref().update(updates);
+        }
+
+
     </script>
+
+    <div id="profileTableDiv"></div>
+
+    <div id="crudProfileDiv">
+        <label>Name:</label>
+        <br>
+        <input type="text" name="name" id="name">
+        <br>
+        <label>Email:</label>
+        <br>
+        <input type="text" name="email" id="email">
+        <br>
+        <label>High Score:</label>
+        <br>
+        <input type="text" name="highScore" id="high_score">
+        <br>
+        <label>Home Town:</label>
+        <br>
+        <input type="text" name="homeTown" id="homeTown">
+        <br>
+        <label>Uid:</label>
+        <input type="text" name="uid" readonly id="uid">
+        <div id="buttons">
+            <input type="button" name="btnSave" value="Save" onclick="writeUserData()">
+            <input type="button" name="btnDelete" value="Delete">
+        </div>
+    </div>
+
 </body>
 
 </html>
