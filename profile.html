@@ -57,8 +57,8 @@
         // Retrieve new posts as they are added to our database
         UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
             var newPost = snapshot.val();
-            //console.log(newPost.username);
-            //console.log(newPost.high_score);
+            console.log(newPost.username);
+            console.log(newPost.high_score);
 
             allKeys.push(snapshot.key);
 
