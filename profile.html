@@ -54,10 +54,16 @@
         var UserDatabaseRef = firebase.database().ref("Users");
         var allKeys = [];
         var allScores = [];
+
+        var userIDArray = [];
+        UserDatabaseRef.on("child_added", function (snapshot, prevChildKey) {
+            var newUser = snapshot.val().uid;
+            userIDArray.push(newUser);
+        });
         // Retrieve new posts as they are added to our database
         UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
             var newPost = snapshot.val();
-            console.log(newPost.username);
+            console.log(newPost.userName);
             console.log(newPost.high_score);
 
             allKeys.push(snapshot.key);
@@ -66,7 +72,7 @@
             newRow.id = snapshot.key;
 
             var newCell1 = document.createElement('TD');
-            newCell1.innerHTML = newPost.name;
+            newCell1.innerHTML = newPost.userName;
 
             var newCell2 = document.createElement('TD');
             newCell2.innerHTML = newPost.email;
@@ -142,7 +148,7 @@
 
             UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
                 //UserDatabaseRef.once('').then(function (snapshot) {
-                var name = snapshot.val().name;
+                var userName = snapshot.val().userName;
                 var email = snapshot.val().email;
                 var high_score = snapshot.val().high_score;
                 var home_town = snapshot.val().home_town;
@@ -156,7 +162,7 @@
                 var txthomeTown = document.getElementById("homeTown");
                 var txtCountry = document.getElementById("homeCountry");
 
-                txtName.value = name;
+                txtName.value = userName;
                 txtEmail.value = email;
                 txtHighScore.value = high_score;
                 txthomeTown.value = home_town;
@@ -166,14 +172,16 @@
         }
         //}
 
-        function writeUserData() {
+        function updateUserData() {
+
+            var thisUser = getCookie("currentUser");
 
             var txtName = document.getElementById("name");
             var txtEmail = document.getElementById("email");
             var txtHomeTown = document.getElementById("homeTown");
             var txtHomeTown = document.getElementById("homeCountry");
 
-            UserDatabaseRef.push({
+            firebase.database().ref("Users/" + thisUser).set({
                 name: txtName.innerHTML,
                 email: txtEmail.innerHTML,
                 home_town: txtHomeTown.innerHTML,
@@ -234,7 +242,7 @@
         <label>Uid:</label>
         <input type="text" name="uid" readonly id="uid">-->
         <div id="buttons">
-            <input type="button" name="btnSave" value="Save" onclick="writeUserData()">
+            <input type="button" name="btnSave" value="Save" onclick="updateUserData()">
             <input type="button" name="btnDelete" value="Delete">
         </div>
     </div>
