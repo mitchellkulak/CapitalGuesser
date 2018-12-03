@@ -396,12 +396,19 @@
       }
     }
 
+    function startNewGame(){
+      
+    }
+
     function generateNewTarget() {
       var submitButton = document.getElementById("submitCapital");
       var startButton = document.getElementById("startButton");
       var targetCapitalDiv = document.getElementById("targetCapitalDiv");
       var capitalName = document.getElementById("capitalName");
       var countryName = document.getElementById("countryName");
+      var finalScoreDiv = document.getElementById("finalScoreDiv");
+
+      finalScoreDiv.style.display = "none";
 
       var randomNumber = Math.floor(Math.random() * Math.floor(capitals.length));
 
@@ -430,10 +437,21 @@
       var diffLat = Math.abs(answerLat - actualLat);
       var diffLng = Math.abs(answerLng - actualLng);
 
+      if(diffLat < 10 && diffLng < 10){
+        score+=800;
+        console.log("Bonus!");
+      }
+
+      if(diffLat>10 && diffLng > 30)
+      {
+        score-=500;
+        console.log("You blew it!");
+      }
+
       console.log("Difference in Lat: " + diffLat);
       console.log("Difference in Lng: " + diffLng);
 
-      var score = 5000 - Math.abs(((diffLat * 2) + diffLng) * 20);
+      var score = 4000 - Math.abs((diffLat + diffLng) * 25);
 
       totalScore += Math.floor(score);
       console.log(totalScore);
@@ -470,17 +488,11 @@
           console.log(snapshot.val().email);
           console.log("yes");
         });
-
-
-        // ...
       }
     }
 
-
-
     function googleSignin() {
       firebase.auth()
-
         .signInWithPopup(provider).then(function (result) {
           var token = result.credential.accessToken;
           var user = result.user;
@@ -505,7 +517,7 @@
           console.log('Signout Failed')
         });
     }
-    var alreadyExists = false;
+
     var firstCallFlag = 0;
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
@@ -538,6 +550,8 @@
           if(userExistsFlag == false){
             console.log("User does not already exist. Creating new user.");
             var obj = {};
+            obj.home_town = "";
+            obj.home_country = "";
             obj.email = email;
             obj.uid = uid;
             obj.userName = displayName;
