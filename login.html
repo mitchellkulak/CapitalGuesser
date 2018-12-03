@@ -46,72 +46,8 @@
         firebase.initializeApp(config);
         var UserDatabaseRef = firebase.database().ref("Users");
 
-        var provider = new firebase.auth.GoogleAuthProvider();
+        
 
-function googleSignin() {
-   firebase.auth()
-   
-   .signInWithPopup(provider).then(function(result) {
-      var token = result.credential.accessToken;
-      var user = result.user;
-		
-      console.log(token)
-      console.log(user)
-   }).catch(function(error) {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-
-      console.log(error.code)
-      console.log(error.message)
-   });
-}
-
-function googleSignout() {
-   firebase.auth().signOut()
-	
-   .then(function() {
-      console.log('Signout Succesfull')
-   }, function(error) {
-      console.log('Signout Failed')  
-   });
-}
-
-var firstCallFlag = 0;
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    if(firstCallFlag == 0){
-        firstCallFlag = 1;
-    }else{
-
-    // User is signed in.
-    var displayName = user.displayName;
-    var email = user.email;
-    var emailVerified = user.emailVerified;
-    var photoURL = user.photoURL;
-    var isAnonymous = user.isAnonymous;
-    var uid = user.uid;
-    document.cookie = "currentUser=" + uid;
-    console.log("SIGNED IN - " + uid);
-    var providerData = user.providerData;
-    // ...
-
-    UserDatabaseRef.orderByChild("uid").equalTo(uid).on("child_added", function (snapshot) {
-          return;
-    });
-
-    var obj = {};
-    obj.email = email;
-    obj.uid = uid;
-    obj.userName = displayName;
-    obj.high_score = 1;
-    UserDatabaseRef.push(obj);
-   
-}
-  } else {
-    // User is signed out.
-    // ...
-  }
-});
 
     </script>
 
