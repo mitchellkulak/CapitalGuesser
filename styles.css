@@ -95,6 +95,11 @@
  #countryName{
     display:inline;
  }
+
+ #crudProfileDiv {
+     display: block;
+     align-content: left;
+ }
  #finalScoreDiv{
     display:none;
     background-color:darkslateblue;

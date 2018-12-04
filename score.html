@@ -56,7 +56,7 @@
             });*/
 
             var scoreObj = new Object();
-            scoreObj.username = newPost.username;
+            scoreObj.name = newPost.username;
             scoreObj.high_score = newPost.high_score;
             allScores.push(scoreObj);
             allScores.forEach(function (scoreObj) {
@@ -72,7 +72,7 @@
             newRow.id = snapshot.key;
 
             var newCell1 = document.createElement('TD');
-            newCell1.innerHTML = newPost.username;
+            newCell1.innerHTML = newPost.name;
 
             var newCell2 = document.createElement('TD');
             newCell2.innerHTML = newPost.high_score;
