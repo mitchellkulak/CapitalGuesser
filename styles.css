@@ -174,3 +174,6 @@
     padding-bottom:5%;
     margin:auto;
 }
+#currentScoreCustom{
+    display:inline;
+}

@@ -60,6 +60,36 @@
       }
     };
     */
+    (function() {
+  class MyTitle extends HTMLElement {
+    connectedCallback() {
+      this.innerHTML = `
+        <style>
+          #myTitle {
+            font-size: 2.5rem;
+            color: darkslateblue;
+            font-family: monospace;
+            text-align: center;
+            z-index:99;
+            position:absolute;
+            bottom:2%;
+            right:35%;
+          }
+        </style>
+        <h1 id="myTitle">Your current score is: <p id="currentScoreCustom">0</p></h1>
+      `;
+    }
+  }
+
+  window.customElements.define('my-title', MyTitle);
+})();
+          // Element functionality written in here
+
+   
+      
+
+
+
 
     var markers = [];
     var currentCountryIndex = 0;
@@ -397,11 +427,8 @@
       }
     }
 
-    function startNewGame(){
-      
-    }
-
     function generateNewTarget() {
+      var customElement = document.getElementById("customElement");
       var submitButton = document.getElementById("submitCapital");
       var startButton = document.getElementById("startButton");
       var targetCapitalDiv = document.getElementById("targetCapitalDiv");
@@ -409,6 +436,7 @@
       var countryName = document.getElementById("countryName");
       var finalScoreDiv = document.getElementById("finalScoreDiv");
 
+      customElement.style.display = "initial";
       finalScoreDiv.style.display = "none";
 
       var randomNumber = Math.floor(Math.random() * Math.floor(capitals.length));
@@ -426,6 +454,9 @@
     }
 
     function submitAnswer() {
+
+      var customElement = document.getElementById("customElement");
+      customElement.style.display = "initial";
       answerLat = markers[markers.length - 1].position.lat();
       answerLng = markers[markers.length - 1].position.lng();
       actualLat = capitals[currentCountryIndex].CapitalLatitude;
@@ -469,11 +500,16 @@
         diffLng = 0;
       }
 
+
       var score = 3500 - Math.abs((diffLat + diffLng) * 25);
 
       totalScore += Math.floor(score);
       console.log(totalScore);
       tries++;
+      
+      
+      var currentScore = document.getElementById("currentScoreCustom");
+      currentScore.innerHTML = totalScore;
 
       //console.log(markers[0].position.lng());
       if (tries < 5) {
@@ -502,6 +538,8 @@
 
           tries = 0;
           totalScore = 0;
+          currentScore.innerHTML = totalScore;
+          customElement.style.display = "none";
 
           console.log(snapshot.val().email);
         });
@@ -615,6 +653,7 @@
 
   <div id="navBar">
     <h1 id="title">World Capital Guesser</h1>
+    <my-title id="customElement"></my-title>
     <ul>
       <li class="navItem"><a class="navItem" href="index.html">Game</a></li>
       <li class="navItem"><a class="navItem" href="score.html">High Scores</a></li>
