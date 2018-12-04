@@ -61,11 +61,11 @@
     };
     */
     (function() {
-  class MyTitle extends HTMLElement {
+  class customScore extends HTMLElement {
     connectedCallback() {
       this.innerHTML = `
         <style>
-          #myTitle {
+          #myScore {
             font-size: 2.5rem;
             color: darkslateblue;
             font-family: monospace;
@@ -76,12 +76,12 @@
             right:35%;
           }
         </style>
-        <h1 id="myTitle">Your current score is: <p id="currentScoreCustom">0</p></h1>
+        <h1 id="myScore">Your current score is: <p id="currentScoreCustom">0</p></h1>
       `;
     }
   }
 
-  window.customElements.define('my-title', MyTitle);
+  window.customElements.define('custom-score', customScore);
 })();
           // Element functionality written in here
 
@@ -653,7 +653,7 @@
 
   <div id="navBar">
     <h1 id="title">World Capital Guesser</h1>
-    <my-title id="customElement"></my-title>
+    <custom-score id="customElement"></custom-score>
     <ul>
       <li class="navItem"><a class="navItem" href="index.html">Game</a></li>
       <li class="navItem"><a class="navItem" href="score.html">High Scores</a></li>
