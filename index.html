@@ -42,6 +42,7 @@
       var newUser = snapshot.val().uid;
       userIDArray.push(newUser);
     });
+    
 
 
     /*
@@ -437,9 +438,13 @@
       var diffLat = Math.abs(answerLat - actualLat);
       var diffLng = Math.abs(answerLng - actualLng);
 
-      if(diffLat < 10 && diffLng < 10){
-        score+=800;
+      if(diffLat < 5 && diffLng < 5){
+        score+=1000;
         console.log("Bonus!");
+      }
+      if(diffLat < 2 && diffLng < 2){
+        score+=500;
+        console.log("Big bonus, in fact!");
       }
 
       if(diffLat>10 && diffLng > 30)
@@ -447,11 +452,24 @@
         score-=500;
         console.log("You blew it!");
       }
+      else if(diffLat>40 || diffLng > 50)
+      {
+        score-=500;
+        console.log("You kinda blew it!");
+      }
 
       console.log("Difference in Lat: " + diffLat);
       console.log("Difference in Lng: " + diffLng);
 
-      var score = 4000 - Math.abs((diffLat + diffLng) * 25);
+      if(diffLat < 1){
+        diffLat = 0;
+      }
+      
+      if(diffLng < 1){
+        diffLng = 0;
+      }
+
+      var score = 3500 - Math.abs((diffLat + diffLng) * 25);
 
       totalScore += Math.floor(score);
       console.log(totalScore);
@@ -486,7 +504,6 @@
           totalScore = 0;
 
           console.log(snapshot.val().email);
-          console.log("yes");
         });
       }
     }
@@ -519,7 +536,7 @@
     }
 
     var firstCallFlag = 0;
-    firebase.auth().onAuthStateChanged(function (user) {
+    firebase.auth().onIdTokenChanged(function (user) {
       if (user) {
         if (firstCallFlag == 0) {
           firstCallFlag = 1;
