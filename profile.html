@@ -13,9 +13,11 @@
     <div id="navBar">
         <h1 id="title">World Capital Guesser</h1>
         <ul>
-            <li><a href="index.html">Game</a></li>
-            <li><a href="score.html">High Scores</a></li>
-            <li><a href="profile.html">Profile</a></li>
+          <li class="navItem"><a class="navItem" href="index.html">Game</a></li>
+          <li class="navItem"><a class="navItem" href="score.html">High Scores</a></li>
+          <li class="navItem"><a class="navItem" href="profile.html">Profile</a></li>
+          <input type="image" id="signIn" onclick="googleSignin()" src="googleSignIn.png" />
+          <!-- <button id="signOut" onclick = "googleSignout()">Google Signout</button> -->
         </ul>
     </div>
 
@@ -115,30 +117,32 @@
     <div id="profileTableDiv"></div>
 
     <div id="crudProfileDiv">
+        <div id="profileContainer">
         <label class="lblprofile">Name:</label>
-        <br>
         <input type="text" name="name" class="inputProfile" id="name">
         <br>
-        <label class="lblprofile">Email:</label>
         <br>
+        <label class="lblprofile">Email:</label>
         <input type="text" name="email" class="inputProfile" id="email">
         <br>
-        <label class="lblprofile">High Score:</label>
         <br>
+        <label class="lblprofile">High Score:</label>
         <input type="text" name="highScore" class="inputProfile" id="high_score" readonly>
         <br>
-        <label class="lblprofile">Home Town:</label>
         <br>
+        <label class="lblprofile">Home Town:</label>
         <input type="text" name="homeTown" class="inputProfile" id="homeTown">
         <br>
-        <label class="lblprofile">Home Country:</label>
         <br>
+        <label class="lblprofile">Home Country:</label>
         <input type="text" name="homeCountry" class="inputProfile" id="homeCountry">
-
+        <br>
+        <br>
         <div id="buttons">
             <input type="button" name="btnSave" value="Save" onclick="updateUserData()">
             <input type="button" name="btnDelete" value="Delete">
         </div>
+    </div>
     </div>
 
 </body>

@@ -13,11 +13,14 @@
     <div id="navBar">
         <h1 id="title">World Capital Guesser</h1>
         <ul>
-            <li><a href="index.html">Game</a></li>
-            <li><a href="score.html">High Scores</a></li>
-            <li><a href="profile.html">Profile</a></li>
+          <li class="navItem"><a class="navItem" href="index.html">Game</a></li>
+          <li class="navItem"><a class="navItem" href="score.html">High Scores</a></li>
+          <li class="navItem"><a class="navItem" href="profile.html">Profile</a></li>
+          <input type="image" id="signIn" onclick="googleSignin()" src="googleSignIn.png" />
+          <!-- <button id="signOut" onclick = "googleSignout()">Google Signout</button> -->
         </ul>
     </div>
+
 
     <div id="scoreTableDiv"></div>
 

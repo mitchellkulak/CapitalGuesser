@@ -135,9 +135,10 @@
     margin: auto;
     margin-top: 5%;
     width: 50%;
-    border: 3px solid rgb(0, 0, 0);
-    padding: 10px;
+    border: 3px solid #ffffff;
     border-radius: 10px;
+    color:#ffffff;
+    padding-bottom: 30px;
 }
 
 .lblprofile {
@@ -146,13 +147,31 @@
 
 .inputProfile {
     padding-left: 10%;
+    float:right;
 }
 
 #scoreTable {
-    border: 3px solid rgb(0, 0, 0);
+    border: 3px solid #ffffff;
     border-radius: 10px;
     margin: auto;
-    margin-top: 5%;
     width: 50%;
-    padding: 10px;
+    margin-top:40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left:20px;
+    text-align: left;
+    color:#ffffff;
+    margin-top:5%;
+}
+
+#buttons{
+    float:right;
+    padding-right:50px;
+    padding-top:4%;
+}
+#profileContainer{
+    width:90%;
+    padding-top:5%;
+    padding-bottom:5%;
+    margin:auto;
 }
