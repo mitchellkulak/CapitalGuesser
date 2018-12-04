@@ -41,22 +41,10 @@
         // Retrieve new posts as they are added to our database
         UserDatabaseRef.orderByChild('high_score').limitToLast(5).on("child_added", function (snapshot) {
             var newPost = snapshot.val();
-            //console.log(newPost.username);
-            //console.log(newPost.high_score);
-
-            //var scoresRef = db.ref("scores");
-            /*UserDatabaseRef.orderByValue().on("value", function (snapshot) {
-                snapshot.forEach(function (data) {
-                    console.log("The " + data.key + " dinosaur's score is " + data.val());
-                    console.log(data.val().high_score);
-                    if (data.val().high_score)
-                });
-            });*/
 
             var scoreObj = new Object();
             scoreObj.name = newPost.userName;
             scoreObj.high_score = newPost.high_score;
-            console.log(scoreObj);
 
             var allScoresCopy = allScores;
             allScores.push(scoreObj);
@@ -64,26 +52,6 @@
             reversed.forEach(function (scoreObj) {
             
             })
-            console.log(allScoresCopy);
-            console.log(reversed);
-            //UserDatabaseRef.orderBy('high_score', 'desc');
-            //.limitToLast(2)
-
-
-
-
-            // var newRow = document.createElement('TR');
-            // newRow.id = snapshot.key;
-
-            // var newCell1 = document.createElement('TD');
-            // newCell1.innerHTML = newPost.userName;
-
-            // var newCell2 = document.createElement('TD');
-            // newCell2.innerHTML = newPost.high_score;
-
-            // newRow.appendChild(newCell1);
-            // newRow.appendChild(newCell2);
-
 
             var table = document.getElementById("scoreTable");
             var row = table.insertRow(i);
@@ -92,23 +60,9 @@
 
             cell1.innerHTML = newPost.userName;
             cell2.innerHTML = newPost.high_score;
-            
-
-            // var thisTableBody = document.getElementById("tbodyID");
-            // thisTableBody.appendChild(newRow);
-
-            
-            //thisTable.appendChild(thisTableBody);
 
             i--;
-            
-            
         });
-
-        function DataToDesc() {
-            //firebase.database().ref('Users')
-            UserDatabaseRef.orderBy('high_score').limitToLast(2);
-        }
 
         function CreateTable() {
             //Div
@@ -135,12 +89,12 @@
             h2.innerHTML = 'Score';
             row1.appendChild(h2);
             
-
             var row2 = document.createElement('TR');
             var row3 = document.createElement('TR');
             var row4 = document.createElement('TR');
             var row5 = document.createElement('TR');
             var row6 = document.createElement('TR');
+
             //add header row to table
             myTable.appendChild(row1);
             myTable.appendChild(row2);

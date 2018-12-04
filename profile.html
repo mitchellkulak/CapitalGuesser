@@ -67,14 +67,11 @@
         function readAndDisplayUserData() {
 
             UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
-                //UserDatabaseRef.once('').then(function (snapshot) {
                 var userName = snapshot.val().userName;
                 var email = snapshot.val().email;
                 var high_score = snapshot.val().high_score;
                 var home_town = snapshot.val().home_town;
                 var home_country = snapshot.val().home_country;
-                //console.log(name);
-                //console.log(email);
 
                 var txtName = document.getElementById("name");
                 var txtEmail = document.getElementById("email");
@@ -86,14 +83,11 @@
                 txtEmail.value = email;
                 txtHighScore.value = high_score;
                 txthomeTown.value = home_town;
-                txtCountry.value = home_town;
-
-                console.log(userInfo);
+                txtCountry.value = home_country;
             });
         }
 
         function updateUserData() {
-
             var thisUser = getCookie("currentUser");
 
             userInfo.forEach(function (element) {
@@ -121,28 +115,26 @@
     <div id="profileTableDiv"></div>
 
     <div id="crudProfileDiv">
-        <label>Name:</label>
+        <label class="lblprofile">Name:</label>
         <br>
-        <input type="text" name="name" id="name">
+        <input type="text" name="name" class="inputProfile" id="name">
         <br>
-        <label>Email:</label>
+        <label class="lblprofile">Email:</label>
         <br>
-        <input type="text" name="email" id="email">
+        <input type="text" name="email" class="inputProfile"  id="email">
         <br>
-        <label>High Score:</label>
+        <label class="lblprofile">High Score:</label>
         <br>
-        <input type="text" name="highScore" id="high_score" readonly>
+        <input type="text" name="highScore" class="inputProfile" id="high_score" readonly>
         <br>
-        <label>Home Town:</label>
+        <label class="lblprofile">Home Town:</label>
         <br>
-        <input type="text" name="homeTown" id="homeTown">
+        <input type="text" name="homeTown" class="inputProfile" id="homeTown">
         <br>
-        <label>Home Country:</label>
+        <label class="lblprofile">Home Country:</label>
         <br>
-        <input type="text" name="homeCountry" id="homeCountry">
-        <!--<br>
-        <label>Uid:</label>
-        <input type="text" name="uid" readonly id="uid">-->
+        <input type="text" name="homeCountry" class="inputProfile" id="homeCountry">
+
         <div id="buttons">
             <input type="button" name="btnSave" value="Save" onclick="updateUserData()">
             <input type="button" name="btnDelete" value="Delete">
