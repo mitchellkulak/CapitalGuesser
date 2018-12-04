@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
-<body onload="CreateTable(), readAndDisplayUserData()">
+<body onload="readAndDisplayUserData()">
 
     <div id="navBar">
         <h1 id="title">World Capital Guesser</h1>
@@ -55,94 +55,14 @@
         var allKeys = [];
         var allScores = [];
 
-        var userIDArray = [];
+        var currentUser = getCookie("currentUser");
+        var userInfo = [];
         UserDatabaseRef.on("child_added", function (snapshot, prevChildKey) {
-            var newUser = snapshot.val().uid;
-            userIDArray.push(newUser);
+            var innerObj = {};
+            innerObj.uid = snapshot.val().uid;
+            innerObj.index = snapshot.key;
+            userInfo.push(innerObj);
         });
-        // Retrieve new posts as they are added to our database
-        UserDatabaseRef.orderByChild("uid").equalTo(getCookie("currentUser")).on("child_added", function (snapshot) {
-            var newPost = snapshot.val();
-            console.log(newPost.userName);
-            console.log(newPost.high_score);
-
-            allKeys.push(snapshot.key);
-
-            var newRow = document.createElement('TR');
-            newRow.id = snapshot.key;
-
-            var newCell1 = document.createElement('TD');
-            newCell1.innerHTML = newPost.userName;
-
-            var newCell2 = document.createElement('TD');
-            newCell2.innerHTML = newPost.email;
-
-            var newCell3 = document.createElement('TD');
-            newCell3.innerHTML = newPost.home_town;
-
-            var newCell4 = document.createElement('TD');
-            newCell4.innerHTML = newPost.high_score;
-
-            newRow.appendChild(newCell1);
-            newRow.appendChild(newCell2);
-            newRow.appendChild(newCell3);
-            newRow.appendChild(newCell4);
-
-            var thisTableBody = document.getElementById("tbodyID");
-            thisTableBody.appendChild(newRow);
-
-            var thisTable = document.getElementById("profileTable");
-            thisTable.appendChild(thisTableBody);
-
-        });
-        function CreateTable() {
-            //Div
-            var myTableDiv = document.getElementById("profileTableDiv");
-
-            //table
-            var myTable = document.createElement("table");
-            myTable.id = 'profileTable';
-
-            //table body
-            var tbody = document.createElement("tbody");
-            tbody.id = "tbodyID";
-
-            //header row
-            var row1 = document.createElement('TR');
-
-            //name
-            var h1 = document.createElement('TH');
-            h1.innerHTML = 'Name';
-            row1.appendChild(h1);
-
-            //email
-            var h2 = document.createElement('TH');
-            h2.innerHTML = 'Email';
-            row1.appendChild(h2);
-
-            //username
-            var h3 = document.createElement('TH');
-            h3.innerHTML = 'Home Town';
-            row1.appendChild(h3);
-
-            var h4 = document.createElement('TH');
-            h4.innerHTML = 'Home Country';
-            row1.appendChild(h4);
-
-            var h5 = document.createElement('TH');
-            h5.innerHTML = 'High Score';
-            row1.appendChild(h5);
-
-
-            //add header row to table
-            myTable.appendChild(row1);
-
-            //add tbody to table
-            myTable.appendChild(tbody);
-
-            //add table to div 
-            myTableDiv.appendChild(myTable);
-        }
 
         function readAndDisplayUserData() {
 
@@ -167,53 +87,34 @@
                 txtHighScore.value = high_score;
                 txthomeTown.value = home_town;
                 txtCountry.value = home_town;
-            });
 
+                console.log(userInfo);
+            });
         }
-        //}
 
         function updateUserData() {
 
             var thisUser = getCookie("currentUser");
 
-            var txtName = document.getElementById("name");
-            var txtEmail = document.getElementById("email");
-            var txtHomeTown = document.getElementById("homeTown");
-            var txtHomeTown = document.getElementById("homeCountry");
+            userInfo.forEach(function (element) {
+                if (element.uid == thisUser) {
+                    var txtName = document.getElementById("name");
+                    var txtEmail = document.getElementById("email");
+                    var txtHomeTown = document.getElementById("homeTown");
+                    var txtHomeCountry = document.getElementById("homeCountry");
+                    var txtHighScore = document.getElementById("high_score");
 
-            firebase.database().ref("Users/" + thisUser).set({
-                name: txtName.innerHTML,
-                email: txtEmail.innerHTML,
-                home_town: txtHomeTown.innerHTML,
-                home_country: txtHomeCountry.innerHTML
-            });
-
-
+                    firebase.database().ref("Users/" + element.index).set({
+                        userName: txtName.value,
+                        email: txtEmail.value,
+                        home_town: txtHomeTown.value,
+                        home_country: txtHomeCountry.value,
+                        uid: element.uid,
+                        high_score: txtHighScore.value
+                    });
+                }
+            })
         }
-        //TODO
-        function writeNewPost(uid, username, picture, title, body) {
-            // A post entry.
-            var postData = {
-                author: username,
-                uid: uid,
-                body: body,
-                title: title,
-                starCount: 0,
-                authorPic: picture
-            };
-
-            // Get a key for a new Post.
-            var newPostKey = firebase.database().ref().child('posts').push().key;
-
-            // Write the new post's data simultaneously in the posts list and the user's post list.
-            var updates = {};
-            updates['/posts/' + newPostKey] = postData;
-            updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-
-            return firebase.database().ref().update(updates);
-        }
-
-
     </script>
 
     <div id="profileTableDiv"></div>
@@ -229,7 +130,7 @@
         <br>
         <label>High Score:</label>
         <br>
-        <input type="text" name="highScore" id="high_score">
+        <input type="text" name="highScore" id="high_score" readonly>
         <br>
         <label>Home Town:</label>
         <br>
