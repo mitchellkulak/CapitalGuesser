@@ -16,7 +16,6 @@
             <li><a href="index.html">Game</a></li>
             <li><a href="score.html">High Scores</a></li>
             <li><a href="profile.html">Profile</a></li>
-            <li><a href="login.html">Login</a></li>
         </ul>
     </div>
 
@@ -36,15 +35,14 @@
         };
         firebase.initializeApp(config);
         var UserDatabaseRef = firebase.database().ref("Users");
-        var allKeys = [];
         var allScores = [];
+        var reversed = [];
+        var i = 6;
         // Retrieve new posts as they are added to our database
-        UserDatabaseRef.orderByChild('high_score').on("child_added", function (snapshot) {
+        UserDatabaseRef.orderByChild('high_score').limitToLast(5).on("child_added", function (snapshot) {
             var newPost = snapshot.val();
             //console.log(newPost.username);
             //console.log(newPost.high_score);
-
-            allKeys.push(snapshot.key);
 
             //var scoresRef = db.ref("scores");
             /*UserDatabaseRef.orderByValue().on("value", function (snapshot) {
@@ -56,36 +54,54 @@
             });*/
 
             var scoreObj = new Object();
-            scoreObj.name = newPost.username;
+            scoreObj.name = newPost.userName;
             scoreObj.high_score = newPost.high_score;
+            console.log(scoreObj);
+
+            var allScoresCopy = allScores;
             allScores.push(scoreObj);
-            allScores.forEach(function (scoreObj) {
+            reversed = allScores.reverse();
+            reversed.forEach(function (scoreObj) {
             
-                //console.log(scoreObj);
-                //allScores[1].sort(function(a, b){return b-a});
-               // allScores[1].sort(function(a, b){return b-a});
+               
             })
-
+            console.log(allScoresCopy);
+            console.log(reversed);
             //UserDatabaseRef.orderBy('high_score', 'desc');
-//.limitToLast(2)
-            var newRow = document.createElement('TR');
-            newRow.id = snapshot.key;
+            //.limitToLast(2)
 
-            var newCell1 = document.createElement('TD');
-            newCell1.innerHTML = newPost.name;
 
-            var newCell2 = document.createElement('TD');
-            newCell2.innerHTML = newPost.high_score;
 
-            newRow.appendChild(newCell1);
-            newRow.appendChild(newCell2);
 
-            var thisTableBody = document.getElementById("tbodyID");
-            thisTableBody.appendChild(newRow);
+            // var newRow = document.createElement('TR');
+            // newRow.id = snapshot.key;
 
-            var thisTable = document.getElementById("scoreTable");
-            thisTable.appendChild(thisTableBody);
+            // var newCell1 = document.createElement('TD');
+            // newCell1.innerHTML = newPost.userName;
 
+            // var newCell2 = document.createElement('TD');
+            // newCell2.innerHTML = newPost.high_score;
+
+            // newRow.appendChild(newCell1);
+            // newRow.appendChild(newCell2);
+
+
+            var table = document.getElementById("scoreTable");
+            var row = table.insertRow(i);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+
+            cell1.innerHTML = newPost.userName;
+            cell2.innerHTML = newPost.high_score;
+            
+
+            // var thisTableBody = document.getElementById("tbodyID");
+            // thisTableBody.appendChild(newRow);
+
+            
+            //thisTable.appendChild(thisTableBody);
+
+            i--;
             
             
         });
@@ -119,9 +135,20 @@
             var h2 = document.createElement('TH');
             h2.innerHTML = 'Score';
             row1.appendChild(h2);
+            
 
+            var row2 = document.createElement('TR');
+            var row3 = document.createElement('TR');
+            var row4 = document.createElement('TR');
+            var row5 = document.createElement('TR');
+            var row6 = document.createElement('TR');
             //add header row to table
             myTable.appendChild(row1);
+            myTable.appendChild(row2);
+            myTable.appendChild(row3);
+            myTable.appendChild(row4);
+            myTable.appendChild(row5);
+            myTable.appendChild(row6);
 
             //add tbody to table
             myTable.appendChild(tbody);

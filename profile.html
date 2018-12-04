@@ -103,6 +103,7 @@
                     var txtHomeTown = document.getElementById("homeTown");
                     var txtHomeCountry = document.getElementById("homeCountry");
                     var txtHighScore = document.getElementById("high_score");
+                    var scoreInt = parseInt(txtHighScore.value);
 
                     firebase.database().ref("Users/" + element.index).set({
                         userName: txtName.value,
@@ -110,7 +111,7 @@
                         home_town: txtHomeTown.value,
                         home_country: txtHomeCountry.value,
                         uid: element.uid,
-                        high_score: txtHighScore.value
+                        high_score: scoreInt
                     });
                 }
             })
